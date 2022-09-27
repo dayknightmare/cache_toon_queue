@@ -1,0 +1,30 @@
+version: '3.5'
+
+services:
+  cache-toon:
+    build: 
+      dockerfile: ./docker/dev/Dockerfile
+      context: ./
+    container_name: cache-toon
+    command: air
+    volumes:
+      - .:/app
+    ports:
+      - "8555:8555"
+    environment:
+      - REDIS_HOST=cache-toon-redis
+      - REDIS_PORT=6379
+      - REDIS_IS_CLUSTER=false
+      - REDIS_CLUSTER_HOSTS=
+      - DEQUEUE_TRICK_TIME=150
+  
+  cache-toon-redis:
+    image: redis:6.0.5
+    container_name: cache-toon-redis
+    ports:
+      - "6379:6379"
+    sysctls:
+      net.core.somaxconn: 1024
+
+networks:
+  cache-toon-network:
