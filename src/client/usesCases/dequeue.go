@@ -163,7 +163,7 @@ func (d *dequeueData) waitForMessage(c chan int) int {
 		}
 	}
 
-	return goAhead
+	return d.getMessageAndDelivery()
 }
 
 func (d *dequeueData) getMessageAndDelivery() int {
@@ -195,14 +195,6 @@ func (d *dequeueData) receiveQueuedMessages() {
 
 	for {
 		t := d.waitForMessage(c)
-
-		if t == exit {
-			return
-		} else if t == skip {
-			continue
-		}
-
-		t = d.getMessageAndDelivery()
 
 		if t == exit {
 			return
@@ -250,9 +242,7 @@ func Dequeue(c *gin.Context) {
 		return
 	}
 
-	defer func() {
-		ws.Close()
-	}()
+	defer ws.Close()
 
 	id := uuid.New().String()
 	queue := c.Param("queue")

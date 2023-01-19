@@ -2,7 +2,6 @@ package usescases
 
 import (
 	"encoding/json"
-	"fmt"
 	"net/http"
 	"time"
 
@@ -39,7 +38,6 @@ func (ml *moveListData) removeMap() error {
 	err = json.Unmarshal([]byte(msg), &q)
 
 	if err != nil {
-		fmt.Println(err)
 		return err
 	}
 
